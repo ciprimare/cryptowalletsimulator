@@ -1,23 +1,34 @@
 package com.cryptowallet.simulator;
 
+import com.cryptowallet.simulator.service.WalletService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/wallet")
 public class WalletController {
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "Test wallet service";
-    }
+    @Autowired
+    WalletService walletService;
 
-    // all crypto currencies with prices
-    // https://min-api.cryptocompare.com/data/blockchain/list
-    // list of all crypto currencies from crypto compare api but no prices
-    // id and symbol
-    // best way I think we should return a list of symbols
+    /**
+     * all crypto currencies from https://min-api.cryptocompare.com/data/blockchain/list
+     *
+     * @return a list with all crypto currencies symbols
+     */
+    @GetMapping(value = "/currencies")
+    public ResponseEntity<Set<String>> allCryptoCurrencies() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(walletService.getAllCryptoCurrencies());
+    }
 
     // create a wallet
     /*
