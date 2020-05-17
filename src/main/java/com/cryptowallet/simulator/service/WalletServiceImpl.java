@@ -1,5 +1,6 @@
 package com.cryptowallet.simulator.service;
 
+import com.cryptowallet.simulator.model.wallet.Wallet;
 import com.cryptowallet.simulator.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,10 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Set<String> getAllCryptoCurrencies() {
         return walletDao.getCryptoCurrencies();
+    }
+
+    @Override
+    public Set<Wallet> getAllWallets() {
+        return walletDao.getWallets();
     }
 }
