@@ -43,14 +43,19 @@ public class WalletDao implements WalletRepository {
 
     @Override
     public Wallet saveOrUpdate(Wallet wallet) {
+        validateWalletName(wallet.getName());
+        validateWalletCurrencies(wallet.getEntries());
         final boolean isNewWallet = wallet.getId() == null;
         if (isNewWallet) {
-            validateWalletName(wallet.getName());
-            validateWalletCurrencies(wallet.getEntries());
             wallet.setId(UUID.randomUUID());
             wallets.add(wallet);
         } else {
-            // we should update the wallet with the new entries
+            final String uuid = wallet.getId().toString();
+            final Wallet walletToReplace =
+                    findWalletByUuid(uuid)
+                            .orElseThrow(() -> new WalletNotFoundException(uuid));
+            wallets.remove(walletToReplace);
+            wallets.add(wallet);
         }
         return wallet;
     }
@@ -63,8 +68,11 @@ public class WalletDao implements WalletRepository {
 
     @Override
     public boolean deleteWallet(String uuid) {
-        // look for uuid in set if found remove it if not return wallet not found error
-        return false;
+        final Wallet walletToDelete =
+                findWalletByUuid(uuid)
+                        .orElseThrow(() -> new WalletNotFoundException(uuid));
+        
+        return wallets.remove(walletToDelete);
     }
 
     // private methods
