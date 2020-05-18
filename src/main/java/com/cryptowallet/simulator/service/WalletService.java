@@ -1,6 +1,7 @@
 package com.cryptowallet.simulator.service;
 
 import com.cryptowallet.simulator.model.wallet.Wallet;
+import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 
 import java.util.Set;
 
@@ -16,4 +17,6 @@ public interface WalletService {
     Wallet updateWallet(Wallet wallet);
 
     boolean deleteWallet(String uuid);
+
+    Wallet exchange(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction);
 }

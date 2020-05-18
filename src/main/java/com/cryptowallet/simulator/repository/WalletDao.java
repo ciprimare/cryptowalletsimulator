@@ -5,6 +5,7 @@ import com.cryptowallet.simulator.exception.WalletCurrencyNotSupportedException;
 import com.cryptowallet.simulator.exception.WalletNotFoundException;
 import com.cryptowallet.simulator.model.wallet.Wallet;
 import com.cryptowallet.simulator.model.wallet.WalletEntry;
+import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -73,6 +74,11 @@ public class WalletDao implements WalletRepository {
                         .orElseThrow(() -> new WalletNotFoundException(uuid));
         
         return wallets.remove(walletToDelete);
+    }
+
+    @Override
+    public Wallet exchangeCurrency(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction) {
+        return null;
     }
 
     // private methods

@@ -1,6 +1,7 @@
 package com.cryptowallet.simulator.service;
 
 import com.cryptowallet.simulator.model.wallet.Wallet;
+import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 import com.cryptowallet.simulator.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,10 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public boolean deleteWallet(String uuid) {
         return walletDao.deleteWallet(uuid);
+    }
+
+    @Override
+    public Wallet exchange(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction) {
+        return walletDao.exchangeCurrency(walletUuid, toWalletUuid, walletEntryTransaction);
     }
 }

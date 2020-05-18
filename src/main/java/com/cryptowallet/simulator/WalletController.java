@@ -1,6 +1,7 @@
 package com.cryptowallet.simulator;
 
 import com.cryptowallet.simulator.model.wallet.Wallet;
+import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 import com.cryptowallet.simulator.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,19 +94,27 @@ public class WalletController {
      */
     @DeleteMapping("/{uuid}")
     public ResponseEntity<String> deleteWallet(@PathVariable String uuid) {
-        walletService.deleteWallet(uuid);
         return ResponseEntity
                 .status(OK)
-                .body("Success");
+                .body((walletService.deleteWallet(uuid)) ? "Success" : "Failed");
     }
 
-    // buy a currency
-    /*
-       Input: to wallet: from currency with amount i want to buy a currency
+    /**
+     * Buys and transfer a specified currency using the specified amount of a specified currency to a specified currency in a specified wallet
+     * The conversion should be obtained from the real values (proposed API(CryptoCompare)).
+     *
+     * @param walletUuid             - wallet from where we take the currency and amount to be exchanged
+     * @param toWalletUuid           - destination wallet if missing will be the current wallet and will be just a simple exchange currency
+     * @param walletEntryTransaction - has two wallet entries from wallet entry and destination wallet entry
+     * @return - the wallet where the new entry has been added
      */
-
-    // transfer currencies between two wallets
-    /*
-       Input: from wallet: amount and currency, to wallet: currency
-     */
+    @PostMapping("/{uuid}/exchange")
+    public ResponseEntity<Wallet> exchangeCurrency(@PathVariable(name = "uuid") String walletUuid,
+                                                   @RequestParam(name = "tow", required = false) String toWalletUuid,
+                                                   @RequestBody @Valid WalletEntryTransaction walletEntryTransaction) {
+        System.out.println();
+        return ResponseEntity
+                .status(OK)
+                .body(walletService.exchange(walletUuid, toWalletUuid, walletEntryTransaction));
+    }
 }

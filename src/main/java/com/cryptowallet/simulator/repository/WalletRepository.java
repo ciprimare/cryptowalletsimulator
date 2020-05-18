@@ -1,6 +1,7 @@
 package com.cryptowallet.simulator.repository;
 
 import com.cryptowallet.simulator.model.wallet.Wallet;
+import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,4 +18,6 @@ public interface WalletRepository {
     Wallet getWalletByUuid(String uuid);
 
     boolean deleteWallet(String uuid);
+
+    Wallet exchangeCurrency(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction);
 }
