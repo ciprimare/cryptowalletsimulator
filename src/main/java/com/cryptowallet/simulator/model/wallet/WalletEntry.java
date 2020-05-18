@@ -1,7 +1,12 @@
 package com.cryptowallet.simulator.model.wallet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Negative;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,7 +14,9 @@ import java.util.UUID;
 public class WalletEntry {
     @JsonIgnore
     private UUID walletId;
+    @NotEmpty(message = "currency wallet must not be null or empty")
     private String currency;
+    @Min(value = 0, message = "wallet amount should be positive")
     private BigDecimal amount;
 
     public UUID getWalletId() {

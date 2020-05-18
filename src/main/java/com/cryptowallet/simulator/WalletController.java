@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -39,7 +40,7 @@ public class WalletController {
      */
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createWallet(@RequestBody Wallet wallet) {
+    public ResponseEntity<?> createWallet(@Valid @RequestBody Wallet wallet) {
         return ResponseEntity
                 .status(CREATED)
                 .body(walletService.createWallet(wallet));

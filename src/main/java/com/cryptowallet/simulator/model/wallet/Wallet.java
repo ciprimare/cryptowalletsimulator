@@ -1,13 +1,18 @@
 package com.cryptowallet.simulator.model.wallet;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 public class Wallet {
     private UUID id;
+    @NotEmpty(message = "wallet name is mandatory")
+    @Size(max = 100, message = "wallet name should no have more than 100 characters")
     private String name;
-    private Set<WalletEntry> entries;
+    private Set<@Valid WalletEntry> entries;
 
     public UUID getId() {
         return id;
