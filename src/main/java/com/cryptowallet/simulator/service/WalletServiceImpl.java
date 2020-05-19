@@ -26,7 +26,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet createWallet(Wallet wallet) {
-        return walletDao.saveOrUpdate(wallet);
+        return walletDao.saveOrUpdateWallet(wallet);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet updateWallet(Wallet wallet) {
-        return walletDao.saveOrUpdate(wallet);
+        return walletDao.saveOrUpdateWallet(wallet);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet exchange(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction) {
-        return walletDao.exchangeCurrency(walletUuid, toWalletUuid, walletEntryTransaction);
+    public Wallet exchange(String fromWalletId, String toWalletId, WalletEntryTransaction walletEntryTransaction) {
+        return walletDao.exchangeCurrency(fromWalletId, toWalletId, walletEntryTransaction);
     }
 }

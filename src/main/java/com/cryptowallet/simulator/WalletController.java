@@ -100,21 +100,20 @@ public class WalletController {
     }
 
     /**
-     * Buys and transfer a specified currency using the specified amount of a specified currency to a specified currency in a specified wallet
-     * The conversion should be obtained from the real values (proposed API(CryptoCompare)).
+     * Exchange currency using CryptoCompare conversion rate and transfer a in the same or in a different wallet
+     * If tow is request param is missing than we will consider exchanging the currency in the same wallet
      *
-     * @param walletUuid             - wallet from where we take the currency and amount to be exchanged
-     * @param toWalletUuid           - destination wallet if missing will be the current wallet and will be just a simple exchange currency
+     * @param fromWalletId           - wallet from where we take the currency and amount to be exchanged
+     * @param toWalletId             - destination wallet if missing will be the current wallet and will be just a simple exchange currency
      * @param walletEntryTransaction - has two wallet entries from wallet entry and destination wallet entry
      * @return - the wallet where the new entry has been added
      */
-    @PostMapping("/{uuid}/exchange")
-    public ResponseEntity<Wallet> exchangeCurrency(@PathVariable(name = "uuid") String walletUuid,
-                                                   @RequestParam(name = "tow", required = false) String toWalletUuid,
+    @PutMapping("/{fromWalletId}/exchange")
+    public ResponseEntity<Wallet> exchangeCurrency(@PathVariable(name = "fromWalletId") String fromWalletId,
+                                                   @RequestParam(name = "toWalletId", required = false) String toWalletId,
                                                    @RequestBody @Valid WalletEntryTransaction walletEntryTransaction) {
-        System.out.println();
         return ResponseEntity
                 .status(OK)
-                .body(walletService.exchange(walletUuid, toWalletUuid, walletEntryTransaction));
+                .body(walletService.exchange(fromWalletId, toWalletId, walletEntryTransaction));
     }
 }

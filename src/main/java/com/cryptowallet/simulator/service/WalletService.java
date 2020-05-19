@@ -18,5 +18,5 @@ public interface WalletService {
 
     boolean deleteWallet(String uuid);
 
-    Wallet exchange(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction);
+    Wallet exchange(String fromWalletId, String toWalletId, WalletEntryTransaction walletEntryTransaction);
 }

@@ -13,11 +13,11 @@ public interface WalletRepository {
 
     Set<Wallet> getWallets();
 
-    Wallet saveOrUpdate(Wallet wallet);
+    Wallet saveOrUpdateWallet(Wallet wallet);
 
     Wallet getWalletByUuid(String uuid);
 
     boolean deleteWallet(String uuid);
 
-    Wallet exchangeCurrency(String walletUuid, String toWalletUuid, WalletEntryTransaction walletEntryTransaction);
+    Wallet exchangeCurrency(String fromWalletId, String toWalletID, WalletEntryTransaction walletEntryTransaction);
 }

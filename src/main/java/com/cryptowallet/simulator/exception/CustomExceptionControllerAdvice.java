@@ -33,4 +33,25 @@ class CustomExceptionControllerAdvice {
     CustomExceptionResponse walletCurrencyNotSupportedHandler(WalletCurrencyNotSupportedException ex) {
         return new CustomExceptionResponse(new Date(), ex.getMessage(), null);
     }
+
+    @ResponseBody
+    @ExceptionHandler(ExchangeRateNotFoundException.class)
+    @ResponseStatus(BAD_REQUEST)
+    CustomExceptionResponse exchangeRateNotFoundExceptionHandler(ExchangeRateNotFoundException ex) {
+        return new CustomExceptionResponse(new Date(), ex.getMessage(), null);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(WalletNotEligibleAmountForExchangeException.class)
+    @ResponseStatus(BAD_REQUEST)
+    CustomExceptionResponse walletNotEligibleAmountForExceptionHandler(WalletNotEligibleAmountForExchangeException ex) {
+        return new CustomExceptionResponse(new Date(), ex.getMessage(), null);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(WalletNotEligibleCurrencyForExchangeException.class)
+    @ResponseStatus(BAD_REQUEST)
+    CustomExceptionResponse walletNotEligibleCurrencyForExchangeHandler(WalletNotEligibleCurrencyForExchangeException ex) {
+        return new CustomExceptionResponse(new Date(), ex.getMessage(), null);
+    }
 }
