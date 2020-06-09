@@ -1,6 +1,9 @@
 package com.cryptowallet.simulator.config;
 
 import com.cryptowallet.simulator.model.cryptocompare.CryptoCurrencies;
+import com.cryptowallet.simulator.model.wallet.Wallet;
+import com.cryptowallet.simulator.repository.CurrencyRepository;
+import com.cryptowallet.simulator.repository.WalletMockDataGenerator;
 import com.cryptowallet.simulator.repository.WalletRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +19,39 @@ import static java.text.MessageFormat.format;
 
 @Configuration
 @EnableScheduling
-class LoadAllCryptoCurrenciesConfig {
+class LoadInitialDataConfig {
     @Autowired
     CryptoCompareConfig cryptoCompareConfig;
     @Autowired
     RestTemplate restTemplate;
     @Autowired
-    WalletRepository walletDao;
+    CurrencyRepository currencyRepository;
+    @Autowired
+    WalletRepository walletRepository;
+    @Autowired
+    WalletMockDataGenerator walletMockDataGenerator;
     @Autowired
     Logger logger;
 
     @Bean
     public void startSync() {
         // Remove this call if scheduling politics changes
-        cryptoCurrenciesAutoSync();
+        final Set<String> supportedCryptoCurrencies = cryptoCurrenciesAutoSync();
+        initWallets(supportedCryptoCurrencies);
+    }
+
+    private void initWallets(Set<String> supportedCryptoCurrencies) {
+        for (Wallet wallet : walletMockDataGenerator.generateWallets()) {
+            walletRepository.saveOrUpdateWallet(wallet, supportedCryptoCurrencies);
+        }
     }
 
     @Scheduled(cron = "0 0 * * 7 ?")
-    private void cryptoCurrenciesAutoSync() {
+    private Set<String> cryptoCurrenciesAutoSync() {
         logger.info("start syncing crypto cryptoCurrencies");
         final Set<String> cryptoCurrencies = getAllCryptoCurrencies();
-        walletDao.saveCryptoCurrencies(cryptoCurrencies);
+        currencyRepository.saveSupportedCryptoCurrencies(cryptoCurrencies);
+        return cryptoCurrencies;
     }
 
     private Set<String> getAllCryptoCurrencies() {

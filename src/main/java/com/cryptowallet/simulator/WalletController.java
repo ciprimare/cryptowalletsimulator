@@ -3,34 +3,23 @@ package com.cryptowallet.simulator;
 import com.cryptowallet.simulator.model.wallet.Wallet;
 import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 import com.cryptowallet.simulator.service.WalletService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(value = "/wallet")
+@RequestMapping("/wallets")
 public class WalletController {
 
-    @Autowired
-    WalletService walletService;
+    private final WalletService walletService;
 
-    /**
-     * all crypto currencies from https://min-api.cryptocompare.com/data/blockchain/list
-     *
-     * @return a list with all crypto currencies symbols
-     */
-    @GetMapping(value = "/currencies")
-    public ResponseEntity<Set<String>> listCryptoCurrencies() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(walletService.getAllCryptoCurrencies());
+    public WalletController(WalletService walletService) {
+        this.walletService = walletService;
     }
 
     /**
@@ -40,8 +29,7 @@ public class WalletController {
      * @return return the new created wallet
      */
     @PostMapping
-    @ResponseBody
-    public ResponseEntity<?> createWallet(@Valid @RequestBody Wallet wallet) {
+    public ResponseEntity<Wallet> createWallet(@Valid @RequestBody Wallet wallet) {
         return ResponseEntity
                 .status(CREATED)
                 .body(walletService.createWallet(wallet));
@@ -52,10 +40,10 @@ public class WalletController {
      *
      * @return a set with all the wallets and the entries
      */
-    @GetMapping(value = "/list")
+    @GetMapping
     public ResponseEntity<Set<Wallet>> listWallets() {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .body(walletService.getAllWallets());
     }
 
@@ -68,21 +56,22 @@ public class WalletController {
     @GetMapping("/{uuid}")
     public ResponseEntity<Wallet> getWallet(@PathVariable String uuid) {
         return ResponseEntity
-                .status(OK)
+                .ok()
                 .body(walletService.getWallet(uuid));
     }
 
     /**
      * Update wallet with the new data provided
      *
-     * @param wallet - wallet to be update
+     * @param wallet - wallet new content
+     * @param uuid   - wallet to update
      * @return return the wallet with the new values
      */
-    @PutMapping
-    @ResponseBody
-    public ResponseEntity<?> updateWallet(@RequestBody Wallet wallet) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Wallet> updateWallet(@PathVariable String uuid, @RequestBody Wallet wallet) {
+        wallet.setId(UUID.fromString(uuid));
         return ResponseEntity
-                .status(OK)
+                .ok()
                 .body(walletService.updateWallet(wallet));
     }
 
@@ -95,7 +84,7 @@ public class WalletController {
     @DeleteMapping("/{uuid}")
     public ResponseEntity<String> deleteWallet(@PathVariable String uuid) {
         return ResponseEntity
-                .status(OK)
+                .ok()
                 .body((walletService.deleteWallet(uuid)) ? "Success" : "Failed");
     }
 
@@ -113,7 +102,7 @@ public class WalletController {
                                                    @RequestParam(name = "toWalletId", required = false) String toWalletId,
                                                    @RequestBody @Valid WalletEntryTransaction walletEntryTransaction) {
         return ResponseEntity
-                .status(OK)
+                .ok()
                 .body(walletService.exchange(fromWalletId, toWalletId, walletEntryTransaction));
     }
 }

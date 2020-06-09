@@ -23,6 +23,8 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    private static final String BASE_PACkAGE = "com.cryptowallet.simulator";
+
     /**
      * https://github.com/springfox/springfox/issues/2932#issuecomment-473911363
      */
@@ -30,11 +32,22 @@ public class SwaggerConfig {
     TypeNameExtractorBootAdapter typeNameExtractorBootAdapter;
 
     @Bean
-    public Docket api() {
+    public Docket walletsAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Wallets")
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage(BASE_PACkAGE))
+                .paths(PathSelectors.ant("/wallets/**"))
+                .build();
+    }
+
+    @Bean
+    public Docket cryptoCurrenciesAPI() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Crypto Currencies")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(BASE_PACkAGE))
+                .paths(PathSelectors.ant("/currencies/**"))
                 .build();
     }
 
@@ -43,7 +56,6 @@ public class SwaggerConfig {
         List<LinkDiscoverer> plugins = new ArrayList<>();
         plugins.add(new CollectionJsonLinkDiscoverer());
         return new LinkDiscoverers(SimplePluginRegistry.create(plugins));
-
     }
 
     @Bean

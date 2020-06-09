@@ -6,8 +6,6 @@ import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
 import java.util.Set;
 
 public interface WalletService {
-    Set<String> getAllCryptoCurrencies();
-
     Set<Wallet> getAllWallets();
 
     Wallet createWallet(Wallet wallet);

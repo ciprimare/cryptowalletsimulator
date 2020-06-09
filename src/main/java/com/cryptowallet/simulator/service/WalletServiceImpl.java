@@ -2,8 +2,8 @@ package com.cryptowallet.simulator.service;
 
 import com.cryptowallet.simulator.model.wallet.Wallet;
 import com.cryptowallet.simulator.model.wallet.WalletEntryTransaction;
+import com.cryptowallet.simulator.repository.CurrencyRepository;
 import com.cryptowallet.simulator.repository.WalletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -11,41 +11,41 @@ import java.util.Set;
 @Service
 public class WalletServiceImpl implements WalletService {
 
-    @Autowired
-    WalletRepository walletDao;
+    private final WalletRepository walletRepository;
+    private final CurrencyRepository currencyRepository;
 
-    @Override
-    public Set<String> getAllCryptoCurrencies() {
-        return walletDao.getCryptoCurrencies();
+    public WalletServiceImpl(WalletRepository walletRepository, CurrencyRepository currencyRepository) {
+        this.walletRepository = walletRepository;
+        this.currencyRepository = currencyRepository;
     }
 
     @Override
     public Set<Wallet> getAllWallets() {
-        return walletDao.getWallets();
+        return walletRepository.getWallets();
     }
 
     @Override
     public Wallet createWallet(Wallet wallet) {
-        return walletDao.saveOrUpdateWallet(wallet);
+        return walletRepository.saveOrUpdateWallet(wallet, currencyRepository.getSupportedCryptoCurrencies());
     }
 
     @Override
     public Wallet getWallet(String uuid) {
-        return walletDao.getWalletByUuid(uuid);
+        return walletRepository.getWalletByUuid(uuid);
     }
 
     @Override
     public Wallet updateWallet(Wallet wallet) {
-        return walletDao.saveOrUpdateWallet(wallet);
+        return walletRepository.saveOrUpdateWallet(wallet, currencyRepository.getSupportedCryptoCurrencies());
     }
 
     @Override
     public boolean deleteWallet(String uuid) {
-        return walletDao.deleteWallet(uuid);
+        return walletRepository.deleteWallet(uuid);
     }
 
     @Override
     public Wallet exchange(String fromWalletId, String toWalletId, WalletEntryTransaction walletEntryTransaction) {
-        return walletDao.exchangeCurrency(fromWalletId, toWalletId, walletEntryTransaction);
+        return walletRepository.exchangeCryptoCurrency(fromWalletId, toWalletId, walletEntryTransaction, currencyRepository.getSupportedCryptoCurrencies());
     }
 }
